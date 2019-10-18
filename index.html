@@ -4,36 +4,34 @@
     <head>
         <title>Hangman</title>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="/assets/css/style.css">
-        <link rel="javascript" href="assets/javascript/game.js">
+        <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     </head>
 
     <body>
         <!-- Heading for the game with image behind -->
-        <h1>HANGMAN</h1>
-        <img src="/assets/images/nbaLogo.jpeg">
-
-        <!-- Div containing the image on te left of the game -->
-        <div id="playerImage">
-            <img src="/assets/images/smallLogo.jpeg">
+        <div id="heading">
+            <h1>HANGMAN</h1>
+            <img src="assets/images/nbaLogo.png">
         </div>
 
-        <!-- Div containing game info and guesses -->
-        <div id="gameContent">
+        <!-- Div containing the image on te left of the game -->
+        <div id="playerImage" class="container">
+                <img id="firstPic" src="assets/images/smallLogo.jpeg">
+        </div>
+
+            <!-- Div containing game info and guesses -->
+        <div id="gameContent" class="container">
             <p>Press any key to get started!</p>
-            <p>Wins</p>
+            <p>Wins:</p>
             <p id="winCounter"></p>
             <p>Current Word</p>
             <p id="hiddenWord"></p>
             <p>Number of guesses remaining:</p>
-            <p id="guessCounter">13</p>
+            <p id="guessCounter">12</p>
             <p>Letters already guessed:</p>
             <p id="guessedLetters">[</p>
         </div>
+        <script href="assets/javascript/game.js">
     </body>
-
-
-
-
 
 </html>
