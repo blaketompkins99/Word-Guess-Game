@@ -1,69 +1,91 @@
-
-// Setting Variables
-var players = ["BIRD", "CARTER", "ANTETOKOUNMPO", "HARDEN", "JORDAN", "LEBRON", "WESTBROOK", "YOUNG"];
-var letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
-"U", "V", "W", "X", "Y", "Z"];
-var guessedLetters = ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_",
-"_", "_", "_", "_", "_", "_"]
-var wrongGuesses = "";
-var wins = 0;
-var remainingGuesses = 12;
+var words = ["BIRD", "CARTER", "ANTETOKOUNMPO", "HARDEN", "JORDAN", "LEBRON", "WESTBROOK", "YOUNG"];
+var alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+var lettersGuessed = 0;
+var guesses = [];
+var computerWord;
+var winCounter = 0;
+var lossCounter = 0;
+var guessesRemaining = 9;
+var letter = "";
 var underscore = "";
 
-// Function for generating the word
-function newGame (){
-
-    // Resets Variables
+function reset() {
+    lettersGuessed = 0;
+    guesses = [];
+    guessesRemaining = 9;
+    letter = "";
     underscore = "";
-    remainingGuesses = 12;
+    computerWord = "";
+    document.getElementById("wrong-guesses").textContent = guesses;
+    document.getElementById("guesses-left").textContent = guessesRemaining;
+    initialize();
+}
 
-    // Picks random player from players list
-    var word = players[Math.floor(Math.random(players) * 8)];
+function winner() {
+    winCounter++;
+    document.getElementById("win-counter").textContent = winCounter;
+    alert("YOU WIN!");
+}
 
-    // Loop to set the number of underscores for the word
-    for(i=0; i < word.length; i++) {
+function loser() {
+    lossCounter++
+    document.getElementById("loss-counter").textContent = lossCounter;
+    alert("YOU SUCK!!");
+}
+
+function initialize() {
+    // Picks random word
+    computerWord = words[Math.floor(Math.random() * words.length)];
+    for (i = 0; i < computerWord.length; i++) {
         underscore = underscore + "_ ";
-        document.getElementById("hiddenWord").textContent = underscore;
+        document.getElementById("word-blanks").textContent = underscore;
     }
-}
-
-// Function for updating the score
-function scoreUpdate() {
-    wins += 1;
-    document.getElementById("winCounter").textContent = wins;
-}
-
-// Function updating remaining guesses
-function guessesLeft() {
-    remainingGuesses--;
-    document.getElementById("guessCounter").textContent = remainingGuesses;
-}
-
-newGame();
-
-if(underscore === word) {
-    scoreUpdate();
-    newGame();
-} else if (remainingGuesses === 0){
-    newGame();
-} else {
-  
-    document.onkeyup = function(event) {
-        // Variable for the guesses
-        var userGuess = event.key.toUpperCase();
-
-        for (i=0; i < word.length(); i++) {
-            if(userGuess === word.charAt(i) && underscore.charAt(i) === "_") {
-                underscore.charAt(i) = userGuess;
-                document.getElementById("hiddenWord").textContent = underscore;
-            } else {
-                if(userGuess === letters[i] && guessedLetters[i] === "_"){
-                    guessedLetters[i] = userGuess;
-                    wrongGuesses += guessedLetters + " ";
-                    document.getElementById("guessedLetters").textContent = guessedLetters;
-                    guessesLeft();
+    console.log(computerWord);
+    // Captures user letter
+    document.onkeypress = function (event) {
+        letter = (String.fromCharCode(event.keyCode).toUpperCase());
+        // Checks to make letter is a new letter
+        if (guesses.indexOf(letter) > -1) {
+            alert("LOSES AT THE BUZZER!")
+        } else {
+            guesses.push(letter);
+            console.log(guesses);
+        }
+        // Checks user input with the selected word
+        if (computerWord.indexOf(letter) > -1) {
+            for (i = 0; i < computerWord.length; i++) {
+                // Checks if letter is correct
+                if (computerWord.charAt(i) == letter) {
+                    var splitWord = underscore.split(" ");
+                    console.log("It works");
+                    lettersGuessed++;
+                    console.log(lettersGuessed);
+                    splitWord[i] = letter;
+                    console.log(underscore[i]);
+                    document.getElementById("word-blanks").textContent = splitWord.join(" ");
+                    underscore = splitWord.join(" ");
+                    if (lettersGuessed == computerWord.length) {
+                        winner();
+                        reset();
+                    }
                 }
+            }
+            // Checks if guesses are wrong
+        } else {
+            for(j=8; j <= 0; j--) { 
+                if(guesses == "_") {
+                    guesses[j] = letter;
+                }
+            }
+            document.getElementById("wrong-guesses").textContent = guesses;
+            guessesRemaining--;
+            document.getElementById("guesses-left").textContent = guessesRemaining;
+            if (guessesRemaining <= 0) {
+                loser();
+                reset();
             }
         }
     }
 }
+
+initialize();
